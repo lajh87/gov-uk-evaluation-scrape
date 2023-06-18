@@ -1,0 +1,43 @@
+theory based
+qualitative comparative analysis
+qca
+realist evaluation
+realist
+contribution analysis
+bayesian updating
+contribution tracing
+most signficant change
+outcome harvesting
+simulation
+experimental
+quasi experimental
+randomised control trial
+rct
+propensity score matching
+timing of events
+interrupted time series
+instrumental variables
+synthetic control
+difference in difference
+regression discontinuity
+cost benefit analysis
+cost effectiveness analysis
+systematic review
+rapid evidence assessment
+meta analysis
+meta-analysis
+ethnography
+realist synthesis
+interview
+focus group
+case study
+survey
+polling
+performance
+monitoring
+qualitative observational
+consultative
+deliberative
+impact
+evaluation
+impact evaluation

@@ -1,4 +1,6 @@
-#' Download the Content from Files as Binary
+# TODO note RDS files are moved to onedrive
+
+#' Download the Content from document Files as Binary
 #' 16 June 23
 #' File Takes 1h + to load
 doc_links <- readr::read_csv("data-raw/20230614-gov-uk-evaluation-doc-links.csv") |>

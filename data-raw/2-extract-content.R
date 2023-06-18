@@ -1,3 +1,8 @@
+# TODO note RDS files are moved to onedrive
+
+#' This script extracts content from binary html data and exports as csv.
+
+
 evaluations <- readr::read_csv("data-raw/20230614-gov-uk-evaluations.csv")
 content_data <- readRDS("data-raw/20230614-Gov-UK-Eval-Content.RDS")
 

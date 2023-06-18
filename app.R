@@ -1,12 +1,9 @@
 library(shiny)
 
-df <- readr::read_csv("data-raw/20230614-gov-uk-evaluations_details.csv")
-docs <- readr::read_csv("data-raw/20230614-gov-uk-evaluation-doc-links.csv")
-keywords <- readr::read_csv("data-raw/20230614-keyword-match.csv")
-
-docs <- docs |>
-  dplyr::left_join(keywords |> dplyr::select(documents, keywords))
-
+keywords <- readr::read_csv("data/keyword_lookup.csv")
+details <- readr::read_csv("data/evaluation_detail_keywords.csv")
+documents <- readr::read_csv("data/evaluation_document_keywords.csv")
+repo <- "https://github.com/lajh87/gov-uk-evaluation-scrape"
 
 ui <- fluidPage(
   helpText(glue::glue(
@@ -15,15 +12,24 @@ ui <- fluidPage(
     "for the keyword 'evaluation' and content purpose 'research_and_statistics'.", 
     .sep = " "
   )),
+  helpText(glue::glue(
+    "The keywords are based on whether there is an exact match in any of the ",
+    "character strings listed in the 'Keywords' tab.",
+    .sep = " "
+  )),
+  helpText(HTML(glue::glue(
+    "This source code can be found of <a href='{repo}' target = '_blank'>github.</a>"
+  ))),
   tabsetPanel(
     tabPanel("Summary", DT::dataTableOutput("table")),
-    tabPanel("Documents", DT::dataTableOutput("documents"))
+    tabPanel("Documents", DT::dataTableOutput("documents")),
+    tabPanel("Keywords", DT::dataTableOutput("keywords"))
   )
 )
 
 server <- function(input, output, session) {
   output$table <- DT::renderDataTable(
-    df |> dplyr::mutate(title = glue::glue("<a href = '{link}' target = '_blank'>{title}</a>")) |>
+    details |> dplyr::mutate(title = glue::glue("<a href = '{link}' target = '_blank'>{title}</a>")) |>
       dplyr::select(-link) |>
       dplyr::relocate(dept, .after = "title") |>
       dplyr::distinct(updated, title, .keep_all = TRUE) |>
@@ -37,22 +43,20 @@ server <- function(input, output, session) {
   )
   
   output$documents <- DT::renderDataTable(
-    df |>
-      dplyr::select(updated, link, title, dept) |>
-      dplyr::distinct(updated, link, title, .keep_all = TRUE) |>
-       dplyr::mutate(title = glue::glue("<a href = '{link}' target = '_blank'>{title}</a>")) |>
-      dplyr::left_join(docs, by = "link", relationship = "many-to-many") |>
-      dplyr::select(-link) |>
+    documents  |>
+      dplyr::mutate(title = glue::glue("<a href = '{link}' target = '_blank'>{title}</a>")) |>
       dplyr::mutate(documents = glue::glue("<a href = '{documents}' target = '_blank'>{basename(documents)}</a>")) |>
-      dplyr::rename(document = documents),
+      dplyr::rename(document = documents) |>
+      dplyr::select(-link),
     filter = "top",
     escape = FALSE,
     selection = "single",
     options = list(
       searchCols = list(NULL,NULL, list(search = 'impact evaluation'))
     )
-    
   )
+  
+  output$keywords <- DT::renderDataTable(keywords)
 }
 
 shinyApp(ui, server)

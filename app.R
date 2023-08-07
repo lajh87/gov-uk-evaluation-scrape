@@ -18,7 +18,7 @@ ui <- fluidPage(
     .sep = " "
   )),
   helpText(HTML(glue::glue(
-    "This source code can be found of <a href='{repo}' target = '_blank'>github.</a>"
+    "This source code can be found on <a href='{repo}' target = '_blank'>github.</a>"
   ))),
   tabsetPanel(
     tabPanel("Summary", DT::dataTableOutput("table")),
